@@ -1,0 +1,1 @@
+any2png.exe %1 -mask %2 -res_ext %3
