@@ -1,7 +1,7 @@
 program any2png;
 
 //
-// Program: convert/rotate/crop any image <layman_add.sh>
+// Program: convert/rotate/crop any image <any2png.exe>
 //
 // Author: Alexey Oknov <pitrider at mail dot ru>
 // 
