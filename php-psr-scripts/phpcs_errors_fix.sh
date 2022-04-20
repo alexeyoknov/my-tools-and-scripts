@@ -15,9 +15,9 @@
 
 function usage() {
     printf "\nChecks all PHP files in directory for PSR and fix ERRORS\n"
-    printf "\nUsage: %s -h -d directory_path [ -s <standart | list> ]" "$(basename "$0")"
+    printf "\nUsage:\n\t%s -h -d directory_path [-s <standart | list>]\n" "$(basename "$0")"
     
-    printf "\n\texample: %s -d /path/to/my/project -s PSR2\n\n" "$(basename "$0")"
+    printf "\nExample:\n\t%s -d /path/to/my/project -s PSR2\n\n" "$(basename "$0")"
     exit 1
 }
 
@@ -63,19 +63,18 @@ do
 done
 
 if [ -d "${DIRECTORY_PATH}" ]; then
-    cd "${DIRECTORY_PATH}"
     DIRECTORY_PATH=$(readlink -f $(readlink -f "${DIRECTORY_PATH}"))
+    cd "${DIRECTORY_PATH}" || exit
 fi
 
-
-for a in `find . -type d \( -path ./.vscode -o -path ./.history -o -path ./resources -o -path ./bootstrap -o -path ./vendor \) -prune -o -name '*.php'`
+for php_file in $(find . -type d \( -path ./.vscode -o -path ./.history -o -path ./resources -o -path ./bootstrap -o -path ./vendor \) -prune -o -iname '*.php')
 do
-    if [ -d "$a" ]; then
+    if [ -d "${php_file}" ]; then
         continue
     fi     
-    ERRORS=`phpcs --standard=${PSR_STANDART} $a | egrep "ERROR\ "`
+    ERRORS=$(phpcs --standard=${PSR_STANDART} ${php_file} | grep -E "ERROR\ ")
     if [ -n "${ERRORS}" ]; then
-        echo "phpcs --standard=${PSR_STANDART} ${DIRECTORY_PATH}/${a/'./'/}"
-        phpcbf --standard=${PSR_STANDART} $a
+        echo "phpcs --standard=${PSR_STANDART} ${DIRECTORY_PATH}/${php_file/'./'/}"
+        phpcbf --standard=${PSR_STANDART} ${php_file}
     fi
 done

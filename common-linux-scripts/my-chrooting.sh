@@ -51,7 +51,7 @@ done
 if [ -b ${ROOT_DEV} ]; then
 	mkdir "${CHROOT_DIR}"
 	if [ ! -d "${CHROOT_DIR}" ]; then
-		exit 1
+		usage
 	fi
 	mount ${ROOT_DEV} "${CHROOT_DIR}"
 	cp /etc/resolv.conf ${CHROOT_DIR}/etc/ 

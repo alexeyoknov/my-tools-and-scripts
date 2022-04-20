@@ -19,7 +19,7 @@ if [ -d "${TORRENT_FILE}" ]; then
     chmod 6775 -R "${TORRENT_FILE}"
     chown root:users -R "${TORRENT_FILE}"
 
-	cd "${TORRENT_FILE}"
+	cd "${TORRENT_FILE}" || exit
 	for file_name in $(ls -1 "${TORRENT_FILE}")
 	do
 		TITLE=$(exiftool "${file_name}" | grep Title | awk -F: '{print $2}')

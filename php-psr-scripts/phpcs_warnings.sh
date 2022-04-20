@@ -16,8 +16,8 @@
 function usage() {
 
     printf "\nChecks all PHP files in directory for PSR and show WARNINGS\n"
-    printf "\nUsage: %s -h -d directory_path [ -s <standart | list> ]" "$(basename "$0")"    
-    printf "\n\texample: %s -d /path/to/my/project -s PSR12\n\n" "$(basename "$0")"
+    printf "\nUsage:\n\t%s -h -d directory_path [-s <standart | list>]\n" "$(basename "$0")"    
+    printf "\nExample:\n\t%s -d /path/to/my/project -s PSR12\n\n" "$(basename "$0")"
     exit 1
 }
 
@@ -63,20 +63,19 @@ do
 done
 
 if [ -d "${DIRECTORY_PATH}" ]; then
-    cd "${DIRECTORY_PATH}"
     DIRECTORY_PATH=$(readlink -f $(readlink -f "${DIRECTORY_PATH}"))
+    cd "${DIRECTORY_PATH}" || exit
 fi
 
-
-for a in `find . -type d \( -path ./.vscode -o -path ./.history -o -path ./resources -o -path ./bootstrap -o -path ./vendor \) -prune -o -name '*.php'`
+for php_file in $(find . -type d \( -path ./.vscode -o -path ./.history -o -path ./resources -o -path ./bootstrap -o -path ./vendor \) -prune -o -name '*.php')
 do
-    if [ -d "$a" ]; then
+    if [ -d "${php_file}" ]; then
         continue
     fi    
-    WARNINGS=`phpcs --standard=${PSR_STANDART} $a | egrep "WARNING\ "`
+    WARNINGS=$(phpcs --standard=${PSR_STANDART} ${php_file} | grep -E "WARNING\ ")
     if [ -n "${WARNINGS}" ]; then
-        echo "phpcs --standard=${PSR_STANDART} ${DIRECTORY_PATH}/${a/'./'/}"
-        phpcs --standard=${PSR_STANDART} $a | egrep "WARNING\ \|"
+        echo "phpcs --standard=${PSR_STANDART} ${DIRECTORY_PATH}/${php_file/'./'/}"
+        phpcs --standard=${PSR_STANDART} ${php_file} | grep -E "WARNING\ \|"
         echo
     fi
 done
