@@ -17,7 +17,7 @@ NGROK="/usr/bin/ngrok"
 PORT="80"
 HOST="127.0.0.1"
 
-IP_RE='^[0-9]+$'
+PORT_RE='^[0-9]+$'
 DOMAIN_NAME_RE='^((http[s]?:\/\/)?)(([a-z0-9]([\w-]*)?[a-z0-9]))((\.[a-z0-9]([\w-]*?)[a-z0-9])+?)((:\d{2,})?)(((\/[\w%]*)?)*)(\.\w*)?((\?[a-zA-Z][\w]*=[\w%]*(&[a-zA-Z][\w]*=[\w%]*)*)?)(#[\w-]*)?\s*?$'
 DOMAIN_IP_RE='[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$'
 
@@ -58,7 +58,7 @@ do
             fi
             ;;
         p)
-            if [[ "${OPTARG}" =~ ${IP_RE} ]]; then
+            if [[ "${OPTARG}" =~ ${PORT_RE} ]]; then
                PORT="${OPTARG}"
             fi
             ;;
@@ -67,8 +67,8 @@ do
     esac
 done
 
-echo "Host: "${HOST}
-echo "Port: "${PORT}
+echo "Host: ${HOST}"
+echo "Port: ${PORT}"
 
-${NGROK} http ${HOST}:${PORT}
+${NGROK} http "${HOST}:${PORT}"
 
