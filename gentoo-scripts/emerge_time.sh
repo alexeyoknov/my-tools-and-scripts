@@ -40,20 +40,23 @@ function _secondsToUser() {
 SUM_TIME=0
 
 function usage() {
-    printf "\nUsage: %s -a <action> [-p <portage_name> || -f <filename> || -c [-x <excluded packages>]]" "$(basename "$0")"
-    printf "\n\nWhere <action> are:\n\n\tdeep\t- -pvuDN @world\n"
-    printf "\tworld\t- -pvuN @world\n"
-    printf "\tpreserved\t- -pv @preserved-rebuild\n"
-    printf "\tsystem\t- -pv @system\n"
-    printf "\tsystemE\t- -pve @system\n"
-    printf "\tportage <portage>\t- genlop -t <portage_name>\n"
-    printf "\tfromfile <filename>\t- get portages from file\n"
-    printf "\tall \t- eix -Icn|egrep \"\\[U|\\[D\"\n"
+    printf "\nThis program shows summary build time from last build\n"
+    printf "\nUsage:\n\t%s -a <action> [-p <portage_name> || -f <filename> || -c [-x <excluded packages>]]" "$(basename "$0")"
+    printf "\n\n\t-a\taction"
+    printf "\n\n\tWhere <action> are:\n\n"
+    printf "\tdeep\n\t\tget packages list from 'emerge -pvuDN @world'\n\n"
+    printf "\tworld\n\t\tget packages list from 'emerge -pvuN @world'\n\n"
+    printf "\tpreserved\n\t\tget packages list from 'emerge -pv @preserved-rebuild'\n\n"
+    printf "\tsystem\n\t\tget packages list from 'emerge -pv @system'\n\n"
+    printf "\tsystemE\n\t\tget packages list from 'emerge -pve @system'\n\n"
+    printf "\tportage <portage>\n\t\tget packages list from 'genlop -t <portage_name>'\n\n"
+    printf "\tfromfile <filename>\n\t\tget packages list from <filename>\n\n"
+    printf "\tall\n\t\tget packages list from 'eix -Icn | egrep \"\\[U|\\[D\"'\n\n"
 
-    printf "c\tcompile packages\n"
-     printf "x\texclude packages\n"
+    printf "\t-c\tcompile packages\n"
+    printf "\t-x\texclude packages\n"
 
-    printf "\n\texample: %s -a all -c -e gcc,calculate-sources\n\n" "$(basename "$0")"
+    printf "\nExample:\n\t%s -a all -c -e gcc,calculate-sources\n\n" "$(basename "$0")"
     exit 1
 }
 
@@ -89,7 +92,7 @@ do
             ;;
         :)
             echo
-              echo "Error: -${OPTARG} requires an argument."
+            echo "Error: -${OPTARG} requires an argument."
             usage
             ;;
         *)
@@ -136,15 +139,11 @@ case "${ACTION}" in
 
 esac
 
-echo
-echo "Excluded packages:"
-echo
 fdel=""
 for del in ${EXCLUDED_PACKAGES//','/' '}
 do
     fdel=$(printf -- '%s\n' ${portage_list[*]} | grep ${del})
     if [ -n "${fdel}" ]; then
-        printf "\t%s\n" "${fdel}";
         portage_list=(${portage_list[*]/${fdel}})
     fi
 done
@@ -164,8 +163,7 @@ done
 printf "\n%d packages: %s\n\n" ${#portage_list[@]} $( _secondsToUser ${SUM_TIME} )
 
 if [ ${NEED_COMPILE} -eq 1 ]; then
-    #checkex
-    
+  
     if [ "${ACTION}" == "all" ]; then
         PACKAGES_LIST="-v ${portage_list[*]}"
     fi 
