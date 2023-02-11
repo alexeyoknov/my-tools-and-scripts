@@ -15,6 +15,13 @@ Common scripts for all Systems
 [my-chrooting.sh](common-linux-scripts/my-chrooting.sh) - Chroot (change root system directory)\
 [ngrok-http-start.sh](common-linux-scripts/ngrok-http-start.sh) - Create http tunnel to your host via ngrok
 
+### [CentOS Scripts](centos-scripts)
+Scripts for CentOS-based systems
+
+[centos-httpd-munin-install.sh](centos-scripts/centos-httpd-munin-install.sh) - Install httpd and munin in CentOS
+
+[centos-in-virtualbox-addons-install.sh](centos-scripts/centos-in-virtualbox-addons-install.sh) - Install VirtualBox additions
+
 ### [Gentoo Scripts](gentoo-scripts)
 Scripts for Gentoo-based systems like Calculate Linux
 
