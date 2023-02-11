@@ -50,13 +50,6 @@ Tools working with media and images
 
 [torrent_file_title_fix](media-tools/torrent_file_title_fix.sh) - changing "Title" to filename in video files using exiftool. Useful for watching series through DNLA on TV. This script calls Transmission when the torrent is completed
 
-img2kdenlive - This script creates a project file for kdenlive from all the images in the folder and puts them all on the timeline with transitions
-
-img2map - prepress | rendering all images with their filenames in a folder and subfolders on an A4 page (12 images per page)
-
-imgs2folder
-img2folder
-
 ## [Windows Tools](windows)
 Tools for Windows
 

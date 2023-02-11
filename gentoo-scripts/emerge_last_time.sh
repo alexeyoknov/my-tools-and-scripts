@@ -5,7 +5,7 @@
 #
 # Author: Alexey Oknov <pitrider at mail dot ru>
 # 
-# Current Version: 1.0.0
+# Current Version: 1.1.0
 #
 # License:
 #  This program is distributed in the hope that it will be useful,
@@ -30,7 +30,6 @@ function _secondsToUser() {
     echo "$h hours $m minutes $s seconds"
 }
 
-
 BUILD_START_TIME_IN_SECONDS=$(tail -n20 /var/log/emerge.log | grep ">>> emerge"|tail -n1|awk -F: '{print $1}')
 BUILD_START_LAST_TIME_FORMATED=$(date -d@"${BUILD_START_TIME_IN_SECONDS}")
 CURRENT_TIME=$(date '+%s')
@@ -40,9 +39,31 @@ ut="emerge completed"
 
 PORTAGE_NAME=$(tail -n20 /var/log/emerge.log | awk '(($2==">>>")&&($3=="emerge")){print $7}' | tail -n1 | sed 's/-[0-9r].*$//')
 
-PORTAGE_LAST_COMPILED_TIME=$(grep -aE -b2 -a4 "AUTOCLEAN: ${PORTAGE_NAME}" /var/log/emerge.log | tail -n7 | sed -n -e 1p -e 7p | awk -F: '{print $1}' | sed 's/[0-9].*-//' | sort -r | sed -r '/$/{N;s/\n/-/}' | bc)
-
 EMERGE_PORTAGE_COMPLETED=$(grep -F -a "${PORTAGE_NAME}-" /var/log/emerge.log | awk '($2==":::"){print $1}'|tail -n1|awk -F: '{print $1}')
+
+emerge_times=( $(genlop -nt ${PORTAGE_NAME} | grep merge | awk -F: '{print $2}' | sed -e 's/\ hours/*3600+/' -e 's/\ hour/*3600+/' -e 's/\ minutes/*60+/' -e 's/\ minute/*60+/' -e 's/\ and\ //' -e 's/\ second.*//' -e 's/,//g' | bc) )
+
+if [ ${#emerge_times[@]} -gt 0 ]; then
+    PORTAGE_LAST_COMPILED_TIME=${emerge_times[${#emerge_times[@]}-1]}
+else
+    PORTAGE_LAST_COMPILED_TIME=0
+fi
+
+PORTAGE_BUILD_TIME_MAX=0
+PORTAGE_BUILD_TIME_MIN=${PORTAGE_LAST_COMPILED_TIME}
+
+for emerge_time in ${emerge_times[@]}
+do
+    if [ ${PORTAGE_BUILD_TIME_MAX} -le ${emerge_time} ]; then
+        PORTAGE_BUILD_TIME_MAX=${emerge_time}
+    fi
+    if [ ${PORTAGE_BUILD_TIME_MIN} -gt ${emerge_time} ] || [ ${PORTAGE_BUILD_TIME_MIN} -eq 0 ]; then
+        PORTAGE_BUILD_TIME_MIN=${emerge_time}
+    fi
+done
+
+PBT_MIN=$( _secondsToUser ${PORTAGE_BUILD_TIME_MIN})
+PBT_MAX=$( _secondsToUser ${PORTAGE_BUILD_TIME_MAX})
 
 et=""
 if [ -n "${BUILD_START_TIME_IN_SECONDS}" ]&&[ -n "${EMERGE_PORTAGE_COMPLETED}" ]&&[ ${EMERGE_PORTAGE_COMPLETED} -gt ${BUILD_START_TIME_IN_SECONDS} ]; then 
@@ -57,5 +78,6 @@ if [ -n "${BUILD_START_TIME_IN_SECONDS}" ]&&[ -z "${EMERGE_PORTAGE_COMPLETED}" ]
 fi
 
 printf "\nPORTAGE NAME:\n\t\t%s\n\nEbuid started at:\n\t\t%s" "${PORTAGE_NAME}" "${BUILD_START_LAST_TIME_FORMATED}"
+printf "\n\nMin build time:\n\t\t%s \n\nMax build time:\n\t\t%s" "${PBT_MIN}" "${PBT_MAX}" 
 printf "\n\nElapsed time from start:\n\t\t%s \n\nLast build time:\n\t\t%s\n\n" "$ut" "$et" 
 
