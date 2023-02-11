@@ -53,5 +53,8 @@
 .history
 .vscode
 codewars
-
+.idea
+.php-cs-fixer.cache
+/Scriptz
+**/*.local.php
 
