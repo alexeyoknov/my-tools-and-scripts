@@ -18,17 +18,14 @@ Common scripts for all Systems
 ### [CentOS Scripts](centos-scripts)
 Scripts for CentOS-based systems
 
-[centos-httpd-munin-install.sh](centos-scripts/centos-httpd-munin-install.sh) - Install httpd and munin in CentOS
-
+[centos-httpd-munin-install.sh](centos-scripts/centos-httpd-munin-install.sh) - Install httpd and munin in CentOS\
 [centos-in-virtualbox-addons-install.sh](centos-scripts/centos-in-virtualbox-addons-install.sh) - Install VirtualBox additions
 
 ### [Gentoo Scripts](gentoo-scripts)
 Scripts for Gentoo-based systems like Calculate Linux
 
-[emerge_last_time.sh](gentoo-scripts/emerge_last_time.sh) - Show elapsed time for current compiled portage
-
-[emerge_time.sh](gentoo-scripts/emerge_time.sh) - Show summary build time from last build for options
-
+[emerge_last_time.sh](gentoo-scripts/emerge_last_time.sh) - Show elapsed time for current compiled portage\
+[emerge_time.sh](gentoo-scripts/emerge_time.sh) - Show summary build time from last build for options\
 [layman_add.sh](gentoo-scripts/layman_add.sh) - add gentoo overlay and mask its all packages
 
 ### [Ubuntu Scripts](ubuntu-scripts)
@@ -38,18 +35,14 @@ Scripts for Gentoo-based systems like Calculate Linux
 ## [PDF Tools](pdf-tools)
 Tools working with PDF
 
-[pdf-img-downgrade400to300](pdf-tools/pdf-img-downgrade400to300.sh) - reducing pdf size by reducing image density to 300 dpi
-
+[pdf-img-downgrade400to300](pdf-tools/pdf-img-downgrade400to300.sh) - reducing pdf size by reducing image density to 300 dpi\
 [pdf-group-pages](pdf-tools/pdf-group-pages.sh) - groups page numbers by their size. Convenient when printing to different printers
 
 ### [PDF Bookmarks](pdf-tools/pdf-bookmarks)
 
-[pdf-dump-metadata](pdf-tools/pdf-bookmarks/pdf-dump-metadata.sh) - export all metadata with bookmarks
-
-[pdf-csvtext-to-metadata](pdf-tools/pdf-bookmarks/pdf-csvtext-to-metadata.sh) - converts ";" to "\n" in file
-
-[pdf-get-metadata](pdf-tools/pdf-bookmarks/pdf-get-metadata.sh)  - get metadata/bookmark form other PDF file
-
+[pdf-dump-metadata](pdf-tools/pdf-bookmarks/pdf-dump-metadata.sh) - export all metadata with bookmarks\
+[pdf-csvtext-to-metadata](pdf-tools/pdf-bookmarks/pdf-csvtext-to-metadata.sh) - converts ";" to "\n" in file\
+[pdf-get-metadata](pdf-tools/pdf-bookmarks/pdf-get-metadata.sh)  - get metadata/bookmark form other PDF file\
 [pdf-update-metadata.sh](pdf-tools/pdf-bookmarks/pdf-update-metadata.sh) - Update metadata/bookmarks in PDF from txt file
 
 ## [Media tools](media-tools)
