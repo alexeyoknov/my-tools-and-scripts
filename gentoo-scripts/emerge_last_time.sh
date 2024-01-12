@@ -37,7 +37,12 @@ ELAPSED_TIME="$((CURRENT_TIME - BUILD_START_TIME_IN_SECONDS))"
 
 ut="emerge completed"
 
-PORTAGE_NAME=$(tail -n20 /var/log/emerge.log | awk '(($2==">>>")&&($3=="emerge")){print $7}' | tail -n1 | sed 's/-[0-9r].*$//')
+PORTAGE_NAME=$1
+IS_CURRENT=0
+if [ -z "$1" ]; then
+    PORTAGE_NAME=$(tail -n20 /var/log/emerge.log | awk '(($2==">>>")&&($3=="emerge")){print $7}' | tail -n1 | sed 's/-[0-9r].*$//')
+    IS_CURRENT=1
+fi
 
 EMERGE_PORTAGE_COMPLETED=$(grep -F -a "${PORTAGE_NAME}-" /var/log/emerge.log | awk '($2==":::"){print $1}'|tail -n1|awk -F: '{print $1}')
 
@@ -77,7 +82,12 @@ if [ -n "${BUILD_START_TIME_IN_SECONDS}" ]&&[ -z "${EMERGE_PORTAGE_COMPLETED}" ]
     ut=$( _secondsToUser ${ELAPSED_TIME} )
 fi
 
-printf "\nPORTAGE NAME:\n\t\t%s\n\nEbuid started at:\n\t\t%s" "${PORTAGE_NAME}" "${BUILD_START_LAST_TIME_FORMATED}"
-printf "\n\nMin build time:\n\t\t%s \n\nMax build time:\n\t\t%s" "${PBT_MIN}" "${PBT_MAX}" 
-printf "\n\nElapsed time from start:\n\t\t%s \n\nLast build time:\n\t\t%s\n\n" "$ut" "$et" 
+printf "\nPORTAGE NAME:\n\t\t%s\n" "${PORTAGE_NAME}"
+if [ ${IS_CURRENT} -eq 1 ]; then
+    printf "\nEbuid started at:\n\t\t%s" "${BUILD_START_LAST_TIME_FORMATED}"
+    printf "\n\nElapsed time from start:\n\t\t%s\n" "$ut" 
+fi
+printf "\nMin build time:\n\t\t%s \n\nMax build time:\n\t\t%s" "${PBT_MIN}" "${PBT_MAX}" 
+printf "\n\nLast build time:\n\t\t%s\n\n" "$et"
+
 
